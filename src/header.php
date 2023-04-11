@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-    <link rel="stylesheet/css" href="src/style.css" type="css">
+    <link rel="stylesheet" href="src/style.css">
     <head>
         <title>Mi proyecto para mi universidad</title>
     </head>
