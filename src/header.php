@@ -1,4 +1,11 @@
 <!DOCTYPE html>
+<?php 
+if($_GET['logout']==true){
+    session_destroy();
+    header("location:/");
+}
+session_start() 
+?>
 <html>
     
     <head>

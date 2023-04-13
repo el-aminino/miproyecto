@@ -56,6 +56,16 @@
     <a href="/"> <img class="mb-4" src="../src/assets/brand/bootstrap-logo.svg" alt="" width="72" height="57"> </a>
 
 
+    <?php
+    if ($_GET['empty']){ 
+    ?>
+    <h1 class="h3 mb-3 fw-normal error-of-amz">Username or password cant be empty</h1>
+<?php }?>
+<?php
+    if ($_GET['failed']){ 
+    ?>
+    <h1 class="h3 mb-3 fw-normal error-of-amz">Username or password is incorrect</h1>
+<?php }?>
   <?php if ($sudf==true){?>
     <h1 class="h3 mb-3 fw-normal error-of-amz">Sorry ! can't sign up now</h1>
     <h1 class="h3 mb-3 fw-normal">Please sign in instead</h1>
@@ -71,15 +81,15 @@
 
 
     <div class="form-floating">
-      <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
-      <label for="floatingInput">Email address</label>
+      <input type="text" name="uname" class="form-control" id="floatingInput" placeholder="username">
+      <label for="floatingInput">Username</label>
     </div>
    
     
       
  
     <div class="form-floating">
-      <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
+      <input type="password" name="pwd" class="form-control" id="floatingPassword" placeholder="Password">
       <label for="floatingPassword">Password</label>
     </div>
 

@@ -16,11 +16,18 @@
         <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
           <input type="search" class="form-control form-control-dark" placeholder="Search..." aria-label="Search">
         </form>
-
-        <div class="text-end">
+       
+        <div class="text-end"> <?php if($_SESSION['login'] != true ){?>
           <button onclick="location.href='sign-in/index.php'" type="button" class="btn btn-outline-light me-2">Login</button>
-          <button onclick="location.href='sign-in/index.php?sudf=true'" type="button" class="btn btn-warning">Sign-up</button>
+          <button onclick="location.href='sign-in/index.php?sudf=true'" type="button" class="btn btn-warning">Sign-up</button><?php } if($_SESSION['login'] == true ){ ?> 
+            <button onclick="location.href='/?logout=true'" type="button" class="btn btn-warning">Sign-out</button>
+            <button onclick="location.href='/?admin=true'" type="button" class="btn btn-outline-light me-2">admin</button>
+            <?php }?>
+
+          
+
         </div>
+
       </div>
     </div>
   </header>
