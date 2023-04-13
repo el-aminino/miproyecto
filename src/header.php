@@ -25,3 +25,4 @@ session_start()
             <div id="contents"> content </div>
             */ ?>
     </div>
+    <body style="text-align: center;" >
