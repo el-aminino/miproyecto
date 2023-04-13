@@ -37,6 +37,3 @@ else{
 
 
 //$sql="SELECT * FROM users WHERE username='$uname' AND password = '$passwd' ";
-
-
-?>

@@ -21,7 +21,7 @@
           <button onclick="location.href='sign-in/index.php'" type="button" class="btn btn-outline-light me-2">Login</button>
           <button onclick="location.href='sign-in/index.php?sudf=true'" type="button" class="btn btn-warning">Sign-up</button><?php } if($_SESSION['login'] == true ){ ?> 
             <button onclick="location.href='/?logout=true'" type="button" class="btn btn-warning">Sign-out</button>
-            <button onclick="location.href='/?admin=true'" type="button" class="btn btn-outline-light me-2">admin</button>
+            <button onclick="location.href='/dashboard'" type="button" class="btn btn-outline-light me-2">admin</button>
             <?php }?>
 
           
