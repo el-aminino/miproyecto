@@ -37,11 +37,6 @@ while ($row = mysqli_fetch_assoc($title_res)) {
     }
 
     .header {
-        /*
-        color: white;
-        position: relative;
-        text-shadow: -1px -1px -1p #000, 1px 1px 1px #000;
-        z-index: 100;*/
         padding: 60px;
         text-align: center;
         background: #1abc9c;
