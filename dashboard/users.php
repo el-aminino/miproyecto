@@ -18,10 +18,12 @@ $resault = mysqli_query($connect_db, $sql);
   tr:nth-child(even) {
     background-color: #dddddd;
   }
-  .error-of-amz{
+
+  .error-of-amz {
     color: red;
   }
-  .success-of-amz{
+
+  .success-of-amz {
     color: green;
   }
 </style>
@@ -60,20 +62,24 @@ $resault = mysqli_query($connect_db, $sql);
 
       <!-- here starts the user manager -->
       </br>
-      <?php 
-        if($_GET['empty']== true){
-          ?><h2 class="h3 mb-3 fw-normal error-of-amz">Username or password or name cant be empty</h2>
-          <?php
-        }
-        if($_GET['duplex']== true){
-          ?><h2 class="h3 mb-3 fw-normal error-of-amz">Username Already exist</h2>
-          <?php
-        }
-        if($_GET['created']== true){
-          ?><h2 class="h3 mb-3 fw-normal success-of-amz">User has been created</h2>
-          <?php
-        }
-        ?>
+      <?php
+      if ($_GET['empty'] == true) {
+      ?><h2 class="h3 mb-3 fw-normal error-of-amz">Username or password or name cant be empty</h2>
+      <?php
+      }
+      if ($_GET['duplex'] == true) {
+      ?><h2 class="h3 mb-3 fw-normal error-of-amz">Username Already exist</h2>
+      <?php
+      }
+      if ($_GET['created'] == true) {
+      ?><h2 class="h3 mb-3 fw-normal success-of-amz">User has been created</h2>
+      <?php
+      }
+      if ($_GET['del'] == true) {
+        ?><h2 class="h3 mb-3 fw-normal success-of-amz">User has been deleted</h2>
+        <?php
+      }
+      ?>
       <h2>Add new user</h2>
       </br>
       <main class="form-signin">
@@ -100,21 +106,23 @@ $resault = mysqli_query($connect_db, $sql);
       <h2>Manage users</h2>
       <table>
         <tr>
-          <th>ID</th>
+          <!--th>ID</th-->
           <th>Username</th>
           <th>Name</th>
           <th>Remove</th>
         </tr>
         <?php for ($i = 0; $i <= mysqli_num_rows($resault); $i++) {
           $row = mysqli_fetch_assoc($resault);
+          if (!empty($row['id'])) {
         ?>
-          <tr>
-            <th><?php echo ($row['id']) ?> </th>
-            <th><?php echo ($row['username']) ?> </th>
-            <th><?php echo($row['name'] ) ?> </th>
-            <th>&nbsp; </th>
-          </tr>
-        <?php } ?>
+            <tr>
+              <!--th><//?php echo ($row['id']) ?> </th-->
+              <th><?php echo ($row['username']) ?> </th>
+              <th><?php echo ($row['name']) ?> </th>
+              <th><a href="rmusr.php?id=<?php echo ($row['id']); ?>"><i class="fa-solid fa-trash"></a></i></th>
+            </tr>
+        <?php }
+        } ?>
       </table>
 
 

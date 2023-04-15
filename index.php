@@ -60,29 +60,6 @@ while ($row = mysqli_fetch_assoc($title_res)) {
     <h1><?php echo ($title); ?></h1>
     <p><?php echo ($desc); ?></p>
 </div>
-
-<!--div id="wrapper">
-
-    <div class="up-down">
-
-    </div>
-        
-    <div class="header">
-        
-        <h1>Title</h1>
-        <h3>Descripcion para esta proyecto</h3>
-        
-    </div>
-
-    <div class="up-down">
-        
-    </div>
-
-
-    <div class="bg-c">
-        <img src="src/bluerose.jpg" width="100%" height="auto" style=" opacity: 80%;"/>
-    </div>
-</div-->
 <?php if ($_GET['login']) { ?>
     <h1>Welcome <?php echo ($_SESSION['username']) ?></h1>
 <?php }

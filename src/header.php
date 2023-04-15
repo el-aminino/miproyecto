@@ -15,14 +15,5 @@ session_start()
         <?php 
             include 'navbar.php';
         ?>
-        <?php 
-        /* 
-        <h1>Amin Mahdizade</h1>
-        <h3>trying to make a CMS using php</h3>
-        <hr>
-        <div>
-            <div id="leftside"> left block </div>
-            <div id="contents"> content </div>
-            */ ?>
     </div>
     <body style="text-align: center;" >

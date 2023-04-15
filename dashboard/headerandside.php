@@ -1,16 +1,18 @@
 <!doctype html>
 <html lang="en">
-<?php 
-$msserver='127.0.0.1';
-$user="admin";
+<?php
+$msserver = '127.0.0.1';
+$user = "admin";
 $password_db = "Admin.1234";
-$utilites_db='utils';
-$connect_db=mysqli_connect($msserver,$user,$password_db,$utilites_db);
+$utilites_db = 'utils';
+$connect_db = mysqli_connect($msserver, $user, $password_db, $utilites_db);
 $title_query = "SELECT title,subtitle FROM data;";
-$title_res = mysqli_query($connect_db,$title_query);
-$title_data= mysqli_fetch_assoc($title_res);
+$title_res = mysqli_query($connect_db, $title_query);
+$title_data = mysqli_fetch_assoc($title_res);
 ?>
+
 <head>
+  <script src="https://kit.fontawesome.com/224861b4a6.js" crossorigin="anonymous"></script>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="">
@@ -60,5 +62,3 @@ $title_data= mysqli_fetch_assoc($title_res);
       </div>
     </div>
   </header>
-
-  
