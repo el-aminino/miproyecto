@@ -95,7 +95,7 @@ $resault = mysqli_query($connect_db, $sql);
             <input type="textarea" name="content" class="form-control" id="floatingInput" placeholder="content">
             <label for="floatingInput">content</label>
           </div>
-          <button class="w-100 btn btn-lg btn-primary" type="submit">add user</button>
+          <button class="w-100 btn btn-lg btn-primary" type="submit">add content</button>
         </form>
       </main>
       <hr>
@@ -106,6 +106,7 @@ $resault = mysqli_query($connect_db, $sql);
           <th>Title</th>
           <th>content</th>
           <th>Remove</th>
+          <th>Edit</th>
         </tr>
         <?php for ($i = 0; $i <= mysqli_num_rows($resault); $i++) {
           $row = mysqli_fetch_assoc($resault);
@@ -116,6 +117,7 @@ $resault = mysqli_query($connect_db, $sql);
               <th><?php echo ($row['title']) ?> </th>
               <th><?php echo ($row['content']) ?> </th>
               <th><a href="rmarticle.php?id=<?php echo ($row['id']); ?>"><i class="fa-solid fa-trash"></a></i></th>
+              <th><a href="modarticle.php?id=<?php echo ($row['id']); ?>"><i class="fa-solid fa-pen"></a></i></th>
             </tr>
         <?php }
         } ?>
