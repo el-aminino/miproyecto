@@ -18,7 +18,7 @@ try :
 except mysql.connector.Error as e :
     print(e)
 
-ser = serial.Serial("/dev/cu.usbserial-1420", 9600)
+ser = serial.Serial("/dev/ttyUSB0", 9600)
 while True:
     readed = ser.readline()
     data = str(readed)
