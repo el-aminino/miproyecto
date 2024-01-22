@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Board</title>
+</head>
+<body>{% if ser :%}
+    <form action='brd' method="post" name="frm">
+    <select name='selectBoard' method="post" action="/">
+        
+        Select Board:
+        {% for seri in ser %}
+        <option name="Board" value= "{{seri}}" SELECTED>{{seri}}</option>"
+        {% endfor %}
+        
+        
+    </select>
+    <button type="submit">Select Board</button>
+    </form>
+    {% elif err : %}
+    <h2>{{err}}</h2>
+    {% endif %}
+</body>
+</html>

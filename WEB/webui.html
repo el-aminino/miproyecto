@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-time Data Update</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+</head>
+<body>
+
+<h1>Real-time Data Update</h1>
+
+<div id="data-display">Waiting for updates...</div>
+
+<script>
+    // Connect to the WebSocket
+    var socket = io.connect('http://192.168.1.112:5000');
+
+    // Listen for updates and update the HTML content
+    socket.on('update_data', function(data) {
+        console.log('Recivied data : ', data)
+        //var price = data.value4
+        //console.log(price)
+        //document.getElementById('data-display').innerHTML = data.value4;
+    });
+</script>
+
+</body>
+</html>

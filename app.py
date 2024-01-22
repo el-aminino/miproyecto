@@ -1,54 +1,79 @@
-from flask import Flask, render_template
-
-
-import serial
+from flask import Flask, render_template, request, session , redirect
 import serial.tools.list_ports
-import mysql.connector
+from pyt.readserial import readeserial as rs 
+from flask_socketio import SocketIO , emit ,send
+import threading
 
-app = Flask(__name__)
-try :
-    db_cn = mysql.connector.connect(
-        host="localhost",
-        user="db_user",
-        password="admin",
-        database="uni"
-    )
-    if db_cn.is_connected():
-        db_info = db_cn.get_server_info()
-        print(db_info)
+app = Flask(__name__, template_folder='')
+
+app.secret_key = "1234"
+
+socket = SocketIO(app, cors_allowed_origins='*')
 
 
-except mysql.connector.Error as e :
-    print(e)
-
-ser = serial.Serial("/dev/cu.usbserial-1410", 9600)
-while True:
-    readed = ser.readline()
-    data = str(readed)
-    data = data.replace('b','')
-    data = data.replace("\\n",'') 
-    data = data.replace('\\r','')
-    data = data.replace('n','')
-    data = data.replace('\'','')
-
-    cursor=db_cn.cursor()
-    prod_cursor="SELECT * FROM GOODS WHERE TAG='{}'".format(data)
-    print(prod_cursor)
-    cursor.execute(prod_cursor)
-    result= cursor.fetchall()
     
-    if result:
-        print(result)
+def send_data(data):
+    print(f'sending data : {data}')
+    socket.emit('update_data',data)
+
+def dummy_data_update():
+    while True:
+        #data = {}
+        data = rs.serreader(session['brdname'])
+        '''data['id'] = a[0]
+        data['gname'] = a[1]
+        data['price'] = a[3]'''
+        send_data(data)
+
+update_thread= threading.Thread(target=dummy_data_update)    
+
+
+@app.route('/', methods=['GET','POST'])
+def home():
+    if session:
+        if session['brdname']:
+            
+ 
+            return render_template('WEB/webui.html')
+            #return rs.serreader(session['brdname'])
     else :
-        print("Product not found id :"+data )
+        return redirect('/select_board?brd=no' , code=302)
+    
 
 
 
 
+@app.route('/select_board', methods=['GET','POST'])
+def select_serial():
+    ports = list(serial.tools.list_ports.comports())
+    if ports:    
+        ser = []
+        
+        for p in ports:
+            a=str(p).split(" ")
+            ser.append(a[0])
+            #return ser
+            
+        return render_template('WEB/dropdown.html', ser=ser)
+    else:
+        err = "Board Not Found"
+        return render_template('WEB/dropdown.html', err=err)
+
+@app.route('/brd', methods =["GET", "POST"])
+def brd():
+    if request.method == "POST":
+        brdname = request.form.get("selectBoard")
+        session['brdname'] = brdname
+        return redirect('/')
+@app.route('/kill')
+def killer():
+    session.pop('brdname', None)
+    return redirect('/', code=302)
 
 
-ser.close()
+update_thread.start()
 
 
-
-
+if __name__ == '__main__':
+    socket.run(app,debug=True)
+    #app.run(debug=True)
