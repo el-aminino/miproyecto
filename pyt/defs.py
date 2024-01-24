@@ -4,7 +4,10 @@ import mysql.connector
 from flask_socketio import emit
 class readeserial:
     def serreader(ser_port) : 
-        ser = serial.Serial(ser_port, 9600,timeout=0)
+        try:
+            ser = serial.Serial(ser_port, 9600,timeout=0)
+        except :
+            return "2"
         try :
             db_cn = mysql.connector.connect(
                 host="localhost",

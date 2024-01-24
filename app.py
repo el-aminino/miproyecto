@@ -29,7 +29,7 @@ socket = SocketIO(app, cors_allowed_origins='*')
     
 def send_data():
     a = d.readeserial.serreader('/dev/ttyUSB0')
-    if a != "1":
+    if a != "1" and a !="2":
         temp = a[0]
         data ={'value1':temp[1],'value2':temp[3]}
         socket.emit('update_data',data)
@@ -53,6 +53,7 @@ def home():
     if session:
         #looks for Comports which exported from system
         if session['brdname']:
+             """     --------- Here You need to make a validation check for Arduino availability ---------     """
              #renders Home page
              return render_template('WEB/webui.html')
     #redirect to board selection page
