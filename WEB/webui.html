@@ -15,16 +15,17 @@
 
 <script>
     // Connect to the WebSocket
-    var socket = io.connect('http://192.168.1.112:5000');
+    var socket = io.connect('http://127.0.0.1:5000');
 
     // Listen for updates and update the HTML content
     socket.on('update_data', function(data) {
         console.log('Recivied data : ', data)
         //var price = data.value4
-        //console.log(price)
-        //document.getElementById('data-display').innerHTML = data.value4;
+        //console.log(typeof price)
+        document.getElementById('data-display').innerHTML = "name :" + data.value1 + "        " + "Price :" + data.value2;
     });
 </script>
 
 </body>
 </html>
+

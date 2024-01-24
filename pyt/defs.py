@@ -4,7 +4,7 @@ import mysql.connector
 from flask_socketio import emit
 class readeserial:
     def serreader(ser_port) : 
-        ser = serial.Serial(ser_port, 9600)
+        ser = serial.Serial(ser_port, 9600,timeout=0)
         try :
             db_cn = mysql.connector.connect(
                 host="localhost",
@@ -42,6 +42,10 @@ class readeserial:
           return "1"
 
         ser.close()
+
+if __name__ == '__main__' :
+    print("\n \nthis suposed to to be happened! This is a library, not a program ......")
+    print("Add this To your program and use it",end=" \n \n \n")
 
 #print(readeserial.serreader('/dev/ttyACM0'))
 
