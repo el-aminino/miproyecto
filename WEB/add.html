@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <style>
+        body,div{
+            text-align: center;
+        }
+    </style>
+    <title>Add product</title>
+</head>
+<body>
+    <h1>Add product to repository</h1>
+    <div><table>   
+            <form method="get" action="add-act">
+            <tr>
+                <div class="holders">
+                 <td><label>Product name : </label></td>
+                 <td><input type="text"></td>
+                </div>
+            </tr>
+            <tr>
+                <div class="holders">
+                    <td><label>Price : </label></td>
+                    <td><input type="text"></td>
+                </div>
+            </tr>
+            <tr> 
+                <div class="holders">
+                    <td><label>Category : </label></td>
+                    <td><select>
+                        <option value="Mans pants" SELECTED>Mens pants</option>
+                        <option value="Womans pants">Womens pants</option>
+                        <option value="boys pants">boys pants</option>
+                        <option value="girls pants">girls pants</option>
+                    </select></td>
+                </div>
+            </tr> 
+            <tr>
+                <div class="holders">
+                    <td><label> TAG :</label></td>
+                    <td><label id="TAG-lbl"></label></td>
+                </div>
+            </tr>
+            <tr>
+                <div class="holders">
+                    <input type="submit" value="submit">
+                </div>
+            </tr>
+        </form>
+    </table></div>
+    <script>
+        var socket = io.connect("http://127.0.0.1:5000/")
+        socket.on('tag_reader' , function(rfid){
+            console.log("TAG recieved : "+ rfid);
+            document.getElementById('TAG-lbl').innerHTML = rfid.value;
+        });
+    </script>
+    
+</body>
+</html>

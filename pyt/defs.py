@@ -48,12 +48,26 @@ class readeserial:
 
         ser.close()
 
+    def tag_reader(ser_port):
+        ser = serial.Serial(ser_port,9600,timeout=2)
+        check = False
+        while not check:
+            readed = ser.readline()
+            data = str(readed)
+            data = data.replace('b','')
+            data = data.replace("\\n",'') 
+            data = data.replace('\\r','')
+            data = data.replace('n','')
+            data = data.replace('\'','')
+            if data : 
+                check = True
+        if data:
+            return data
+        
+
+
 if __name__ == '__main__' :
     #for i in range(0,2):
-        a= readeserial.serreader("/dev/ttyUSB1")
+        a= readeserial.tag_reader("/dev/ttyUSB1")
         print(a)
-
-
-
-
         
