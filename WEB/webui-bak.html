@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-time Data Update</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+</head>
+<body>
+
+<h1>Real-time Data Update</h1>
+
+<div id="data-display">Waiting for updates...</div>
+
+
+<table>
+    <thead>
+        <th>Name</th>
+        <th>price</th>
+        <th>Count</th>
+    </thead>
+    <tbody id="table-body">
+
+    </tbody>
+</table>
+
+
+
+<script>
+    // Connect to the WebSocket
+    var socket = io.connect('http://127.0.0.1:5000');
+
+    var gname = "";
+    var gprice;
+    var nameCount = {};
+    
+    function updateTable(name,price) {
+            const tableBody = document.getElementById('table-body');
+            const newRow = document.createElement('tr');
+
+            const nameCell = document.createElement('td');
+            nameCell.innerText = name || '';
+            newRow.appendChild(nameCell);
+
+            const priceCell = document.createElement('td');
+            priceCell.innerText = price || '';
+            newRow.appendChild(priceCell);
+
+
+            nameCount[name]= (nameCount[name] || 0) +1;
+            
+
+            const Counter = document.createElement('td');
+            Counter.innerText = nameCount[name];
+            newRow.appendChild(Counter);
+
+
+
+
+            tableBody.appendChild(newRow);
+      
+    }
+
+    
+    
+
+
+    // Listen for updates and update the HTML content
+    socket.on('send_name', function(name) {
+        console.log('Recivied data : ', name.value);
+        gname = name.value
+        //fetchData(name.value);
+        //document.getElementById('data-display').innerHTML = "name :" + name.value;
+    });
+    socket.on('send_price', function(price) {
+        console.log('Recivied data : ', price.value);
+        fetchData(gname,price.value);
+        //document.getElementById('data-display').innerHTML = "name :" + price.value;
+    });
+    
+
+    function fetchData(name,price){
+        updateTable(name || [],price || []);
+    }
+
+</script>
+
+</body>
+</html>
+

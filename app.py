@@ -28,13 +28,21 @@ socket = SocketIO(app, cors_allowed_origins='*')
 #definations we need here
     
 def send_data():
-    a = d.readeserial.serreader('/dev/ttyUSB0')
+    a = d.readeserial.serreader('/dev/ttyUSB1')
     if a != "1" and a !="2":
-        temp = a[0]
-        data ={'value1':temp[1],'value2':temp[3]}
-        socket.emit('update_data',data)
-        print(f'sending data :{data}')
+        print(a)
+        #print(str(type(a[1]))+str(type(a[2])))
+        #temp = a[1]+","+str(a[2])
+        price ={'value':a[2]}#,'value2':a[2]}
+        name = {'value':a[1]}
+        
+        socket.emit('send_name',name)
+        print(f'sending price :{name}')
+        socket.emit('send_price',price)
+        print(f'sending price :{price}')
+
 def dummy_data_update():
+    print('dummy Ready')
     while True:
         send_data()
 

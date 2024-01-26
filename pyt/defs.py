@@ -4,10 +4,10 @@ import mysql.connector
 from flask_socketio import emit
 class readeserial:
     def serreader(ser_port) : 
-        try:
-            ser = serial.Serial(ser_port, 9600,timeout=0)
-        except :
-            return "2"
+        #try:
+        ser = serial.Serial(ser_port, 9600,timeout=2)
+        #except :
+        #    return "2"
         try :
             db_cn = mysql.connector.connect(
                 host="localhost",
@@ -15,42 +15,45 @@ class readeserial:
                 password="admin",
                 database="uni"
             )
-            #if db_cn.is_connected():
-            #    db_info = db_cn.get_server_info()
-            #    print(db_info)
-
 
         except mysql.connector.Error as e :
             return e
 
 
-
-        readed = ser.readline()
-        data = str(readed)
-        data = data.replace('b','')
-        data = data.replace("\\n",'') 
-        data = data.replace('\\r','')
-        data = data.replace('n','')
-        data = data.replace('\'','')
-
+        check = False
+        while not check:
+            #try :
+            readed = ser.readline()
+            #print(readed)
+            #except : 
+            #    readed = ser.readline()
+            data = str(readed)
+            data = data.replace('b','')
+            data = data.replace("\\n",'') 
+            data = data.replace('\\r','')
+            data = data.replace('n','')
+            data = data.replace('\'','')
+            if data :
+                check =True
         cursor=db_cn.cursor()
         prod_cursor="SELECT * FROM goods WHERE TAG='{}'".format(data)
         #print(prod_cursor)
         cursor.execute(prod_cursor)
-        result= cursor.fetchall()
+        result= list(cursor.fetchall())
             
         if result:
-            return result
+            return list(result[0])
         else :
           return "1"
 
         ser.close()
 
 if __name__ == '__main__' :
-    print("\n \nthis suposed to to be happened! This is a library, not a program ......")
-    print("Add this To your program and use it",end=" \n \n \n")
+    #for i in range(0,2):
+        a= readeserial.serreader("/dev/ttyUSB1")
+        print(a)
 
-#print(readeserial.serreader('/dev/ttyACM0'))
+
 
 
         
