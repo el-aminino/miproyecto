@@ -14,23 +14,23 @@
 <body>
     <h1>Add product to repository</h1>
     <div><table>   
-            <form method="get" action="add-act">
+            <form id="get_data" method="post"  action="add-act">
             <tr>
                 <div class="holders">
                  <td><label>Product name : </label></td>
-                 <td><input type="text"></td>
+                 <td><input name="p_name" id="p_name" type="text"></td>
                 </div>
             </tr>
             <tr>
                 <div class="holders">
                     <td><label>Price : </label></td>
-                    <td><input type="text"></td>
+                    <td><input name="p_price" placeholder="Default = 500000" id="p_price" type="text"></td>
                 </div>
             </tr>
             <tr> 
                 <div class="holders">
                     <td><label>Category : </label></td>
-                    <td><select>
+                    <td><select name="p_cat">
                         <option value="Mans pants" SELECTED>Mens pants</option>
                         <option value="Womans pants">Womens pants</option>
                         <option value="boys pants">boys pants</option>
@@ -41,22 +41,62 @@
             <tr>
                 <div class="holders">
                     <td><label> TAG :</label></td>
-                    <td><label id="TAG-lbl"></label></td>
+                    <td><label id="TAG-lbl">Bring TAG to print ID</label></td>
+                    <input type="hidden" id="p_tag" name="p_tag" value="">
                 </div>
             </tr>
             <tr>
                 <div class="holders">
-                    <input type="submit" value="submit">
+                    <input type="button" onclick="sumbission()" value="submit">
                 </div>
             </tr>
         </form>
     </table></div>
     <script>
-        var socket = io.connect("http://127.0.0.1:5000/")
-        socket.on('tag_reader' , function(rfid){
-            console.log("TAG recieved : "+ rfid);
+        var socket = io.connect("http://127.0.0.1:5000/");
+        socket.on('new_tag' , function(rfid){
+            console.log("TAG recieved : "+ rfid.value);
             document.getElementById('TAG-lbl').innerHTML = rfid.value;
+            document.getElementById("p_tag").value = rfid.value;
+            //update_tag_val(rfid)
         });
+        function sumbission(){
+            var name_validate = document.getElementById("p_name");
+            var price_validate = document.getElementById("p_price");
+            var tag_validate = document.getElementById("p_tag");
+            var nerr = false;
+            var perr = false;
+            var tagerr = false ;
+            if ( name_validate !== null && name_validate.value === "" ){
+                nerr = true;
+            }
+            if ( price_validate !== null && price_validate.value === "" ){
+                price_validate.value = 500000
+            }
+            if (tag_validate !== null && tag_validate.value ===""){
+                tagerr = true
+            }
+            
+            
+            pint = parseInt(price_validate.value)
+
+
+            if ( perr || nerr ){      
+                if (!nerr && tagerr) {
+                    alert("tag didnt find")
+                }
+                if (!tagerr && nerr){
+                    alert("Name can't be empty")
+                }
+                if (tagerr&&nerr){
+                    alert("Name and tag can't be empty ")
+                }
+            }
+            
+            if (!nerr && !tagerr){
+                document.getElementById("get_data").submit();
+            }
+        }
     </script>
     
 </body>

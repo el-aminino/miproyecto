@@ -28,8 +28,8 @@ socket = SocketIO(app, cors_allowed_origins='*')
 #definations we need here
     
 def send_data():
-    a = d.readeserial.serreader('/dev/ttyUSB1')
-    if a != "1" and a !="2":
+    a = d.readeserial.serreader('/dev/ttyUSB0')
+    if isinstance(a,str) == False:
         print(a)
         #print(str(type(a[1]))+str(type(a[2])))
         #temp = a[1]+","+str(a[2])
@@ -40,16 +40,45 @@ def send_data():
         print(f'sending price :{name}')
         socket.emit('send_price',price)
         print(f'sending price :{price}')
-
+    if isinstance(a,str):
+        print(a)
+        rfid = {'value':a}
+        socket.emit("new_tag",rfid)
+        print(f'sending price :{rfid}')
 def dummy_data_update():
-    print('dummy Ready')
     while True:
         send_data()
+  
+
+
+
+
+def get_tag():
+    a = d.readeserial.tag_reader('/dev/ttyUSB0')
+    if a != "1":
+        print(a)
+
+
+def dummy_get_tag():
+    
+    while True:
+        get_tag()
+
+
+
 
 
 
 #define whick thread we need here
-update_thread= threading.Thread(target=dummy_data_update)    
+update_thread= threading.Thread(target=dummy_data_update)  
+get_thread = threading.Thread(target=dummy_get_tag)  
+
+
+
+
+
+
+
 
 
 
@@ -57,6 +86,8 @@ update_thread= threading.Thread(target=dummy_data_update)
 #home page
 @app.route('/', methods=['GET','POST'])
 def home():
+    if not update_thread.is_alive():
+        update_thread.start()
     #checks if there is any session variable
     if session:
         #looks for Comports which exported from system
@@ -71,9 +102,13 @@ def home():
 
 
 
+
+
+
 #select arduino board by user 
 @app.route('/select_board', methods=['GET','POST'])
 def select_serial():
+
     #List any connected COM device
     ports = list(serial.tools.list_ports.comports())
     
@@ -94,9 +129,18 @@ def select_serial():
 
 
 
+
+
+
+
+
+
+
+
 #Proccess related to board selection (Action page)
 @app.route('/brd', methods =["GET", "POST"])
 def brd():
+
     #Looks for POST method
     if request.method == "POST":
         brdname = request.form.get("selectBoard")
@@ -105,14 +149,54 @@ def brd():
 
 
 
+
+
+
+
+
+
+
+
 @app.route('/add-prod')
 def addprod():
-    return "Product add"
+    if not update_thread.is_alive():
+        update_thread.start()
+    return render_template("WEB/add.html")
+
+
+
+
+
+
+
+
+
+@app.route('/add-act' , methods=["GET","POST"])
+def addact():
+
+    if request.method == "POST":
+        p_name = request.form.get("p_name")
+        p_price = request.form.get("p_price")
+        p_cat = request.form.get("p_cat")
+        p_tag = request.form.get("p_tag")
+        print(p_name)
+        print(p_price)
+        print(p_cat)
+        print(p_tag)
+        db_cn = d.mysql_defs.dbcn()
+        cursor = db_cn.cursor()
+        add_cursor = f"INSERT INTO goods (GName,Price,Category,TAG) values('{p_name}','{p_price}','{p_cat}','{p_tag}');"
+        cursor.execute(add_cursor)
+        #cursor.fetchall()
+        db_cn.commit()
+        return redirect('/')
+
 
 
 
 @app.route('/manage-prod')
 def manprod():
+
     return "Product Management"
 
 
@@ -128,6 +212,7 @@ def killer():
 
 
 if __name__ == '__main__':
-    update_thread.start()
+
+
     socket.run(app,debug=True)
     #app.run(debug=True)
