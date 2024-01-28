@@ -10,9 +10,10 @@
      <link rel="stylesheet" href="{{ url_for('static',filename='WEB/Assets/trash.css')}}">
 
     <meta charset="UTF-8">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static',filename='WEB/Assets/fav.png')}}">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Real-time Data Update</title>
+    <title>{{ title }}</title>
     <script src="{{ url_for('static' , filename='WEB/Assets/socket.io.js')}}"></script>
     <style>
         body {
@@ -38,7 +39,8 @@
     <script src="{{ url_for('static' , filename='WEB/Assets/bootstrap.bundle.js')}}"></script>
     
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="/">Navbar</a>
+        <img src="{{ url_for('static',filename='WEB/Assets/fav.png')}}" width="30" height="30" class="d-inline-block align-top" alt="">
+        <i class="navbar-brand" href="/">{{ title }}</i>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>

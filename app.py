@@ -90,7 +90,7 @@ get_thread = threading.Thread(target=dummy_get_tag)
 #home page
 @app.route('/', methods=['GET','POST'])
 def home():
-   
+    title = 'home'
     #checks if there is any session variable
     if session:
         #looks for Comports which exported from system
@@ -98,10 +98,8 @@ def home():
             global boardname 
             boardname = session['brdname']
             print(boardname)
-            if update_thread.is_alive() == False:
-                     update_thread.start()
              #renders Home page
-            return render_template('WEB/webui.html')
+            return render_template('WEB/webui.html', title = title)
     #redirect to board selection page
     else :
         return redirect('/select_board?brd=no' , code=302)
@@ -115,7 +113,7 @@ def home():
 #select arduino board by user 
 @app.route('/select_board', methods=['GET','POST'])
 def select_serial():
-
+    title = 'select board'
     #List any connected COM device
     ports = list(serial.tools.list_ports.comports())
     
@@ -127,12 +125,11 @@ def select_serial():
             a=str(p).split(" ")
             ser.append(a[0])
         #render Board selection HTML interface
-        return render_template('WEB/dropdown.html', ser=ser)
-
+        return render_template('WEB/dropdown.html', ser=ser, title = title)
     else:
         #returns error for not finding any COM device connected
         err = "Board Not Found"
-        return render_template('WEB/dropdown.html', err=err)
+        return render_template('WEB/dropdown.html', err=err, title = title)
 
 
 
@@ -147,7 +144,6 @@ def select_serial():
 #Proccess related to board selection (Action page)
 @app.route('/brd', methods =["GET", "POST"])
 def brd():
-
     #Looks for POST method
     if request.method == "POST":
         brdname = request.form.get("selectBoard")
@@ -166,9 +162,8 @@ def brd():
 
 @app.route('/add-prod')
 def addprod():
-    if update_thread.is_alive() == False:
-        update_thread.start()
-    return render_template("WEB/add.html")
+    title = 'Add Product'
+    return render_template("WEB/add.html", title = title)
 
 
 
@@ -180,7 +175,6 @@ def addprod():
 
 @app.route('/add-act' , methods=["GET","POST"])
 def addact():
-
     if request.method == "POST":
         p_name = request.form.get("p_name")
         p_price = request.form.get("p_price")
@@ -203,13 +197,14 @@ def addact():
 
 @app.route('/manage-prod')
 def manprod():
+    title = 'Manage Products'
     db_cn = d.mysql_defs.dbcn()
     cursor = db_cn.cursor()
     query = "Select * FROM goods;"
     cursor.execute(query)
     result = cursor.fetchall()
     i = 0
-    return render_template("WEB/pro-man.html",data = result, i = i)
+    return render_template("WEB/pro-man.html",data = result, i = i, title = title)
 
 @app.route('/del-prod', methods=['GET','POST'])
 def delprod():
@@ -237,6 +232,6 @@ def killer():
 
 if __name__ == '__main__':
 
-
+    update_thread.start()
     socket.run(app,debug=True)
     #app.run(debug=True)
