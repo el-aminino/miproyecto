@@ -1,11 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Select Board</title>
-</head>
-<body>{% if ser :%}
+{% include "WEB/Assets/header.html" %}
+{% if ser :%}
     <form action='brd' method="post" name="frm">
     <select name='selectBoard' method="post" action="/">
         

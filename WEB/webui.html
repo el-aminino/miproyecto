@@ -1,46 +1,27 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Real-time Data Update</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+{% include "WEB/Assets/header.html" %}
+   
 
-    <style>
-        body {
-            text-align: center;
-        }
-        table{
-            border-collapse: collapse;
-            width: 100%;
-
-        }
-        th,td {
-            border: 1px solid #dddddd;
-            text-align: center;
-            padding: 8px;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-    </style>
-</head>
-<body>
 
     <h1>Sales Bill</h1>
 
-    <h3 id="data-display">Reading data from RFID Devce</h3>
+    <h3 id="data-display">Reading data from RFID Device</h3>
 
     <hr>
-    
+    <table>
+        <tbody>
+            <tr>
+                <td>Total</td>
+                <td id="Final_payment"></td>
+            </tr>
+        </tbody>
+    </table>
 <table>
     <thead>
         <th>id</th>
         <th>Name</th>
         <th>price</th>
         <th>Count</th>
-        <th>Total</th>
+        <th>Pay</th>
     </thead>
     <tbody id="table-body">
 
@@ -57,8 +38,10 @@
     var gprice;
     var nameCount = {};
     var ids=1 
+    var tot = 0
     function updateTable(name,price) {
 
+            const pay = document.getElementById('Final_payment')
             const tableBody = document.getElementById('table-body');
             let existingRow = null;
             //const existingRow = tableBody.querySelector(`tr[data-name="${name}"]`);
@@ -69,7 +52,7 @@
                 }
             }
             );
-
+           
 
             console.log("existing Row" + existingRow)
             if (existingRow){
@@ -139,9 +122,19 @@
         //document.getElementById('data-display').innerHTML = "name :" + price.value;
     });
     
-
     function fetchData(name,price){
         updateTable(name || [],price || []);
+        tot = 0
+        const pay = document.getElementById('Final_payment')
+        const tableBody = document.getElementById('table-body');
+        Array.from(tableBody.children).forEach(row => {
+                const PaymentVal = row.cells[4].innerText;
+                tot+= parseInt(PaymentVal);
+                console.log(tot);
+                pay.innerText=tot
+            });
+        
+        
     }
 
 </script>

@@ -1,0 +1,64 @@
+{% include "WEB/Assets/header.html" %}
+   
+
+
+    <h1>Product List</h1>
+
+    <h3 id="data-display">remove any product here</h3>
+
+    <hr>
+    
+<table>
+    <thead>
+        <th>id</th>
+        <th>Name</th>
+        <th>price</th>
+        <th>Category</th>
+        <th>Tag ID</th>
+        <th>Delete</th>
+    </thead>
+    <tbody id="table-body">
+{%
+    for r in data:
+%}
+<tr>
+    <td id="pro-id"></td>
+    <td>{{ r[1] }}</td>
+    <td>{{ r[2] }}</td>
+    <td>{{ r[3] }}</td>
+    <td>{{ r[4] }}</td>
+    <td><a href="/del-prod?id={{ r[4] }}"><i class="gg-trash"></i></a></td>
+</tr>
+{% endfor%}
+    </tbody>
+</table>
+
+
+
+
+<script>
+    // Connect to the WebSocket
+    var socket = io.connect('http://127.0.0.1:5000');
+
+    var gname = "";
+    var gprice;
+    var nameCount = {};
+    var ids=1 
+    function updateID() {
+
+            const tableBody = document.getElementById('table-body');
+            //const existingRow = tableBody.querySelector(`tr[data-name="${name}"]`);
+            Array.from(tableBody.children).forEach(row => {
+                row.cells[0].innerText = ids;
+                ids +=1 ;
+            }
+
+            );
+    }
+    updateID()
+
+</script>
+
+</body>
+</html>
+

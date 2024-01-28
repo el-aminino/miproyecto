@@ -1,34 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
-    <style>
-        body,div{
-            text-align: center;
-        }
-    </style>
-    <title>Add product</title>
-</head>
-<body>
+{% include "WEB/Assets/header.html" %}
+   
+
     <h1>Add product to repository</h1>
-    <div><table>   
+    <table>   
             <form id="get_data" method="post"  action="add-act">
             <tr>
-                <div class="holders">
                  <td><label>Product name : </label></td>
                  <td><input name="p_name" id="p_name" type="text"></td>
-                </div>
+                
             </tr>
             <tr>
-                <div class="holders">
+
                     <td><label>Price : </label></td>
                     <td><input name="p_price" placeholder="Default = 500000" id="p_price" type="text"></td>
-                </div>
+
             </tr>
             <tr> 
-                <div class="holders">
+
                     <td><label>Category : </label></td>
                     <td><select name="p_cat">
                         <option value="Mans pants" SELECTED>Mens pants</option>
@@ -36,22 +24,23 @@
                         <option value="boys pants">boys pants</option>
                         <option value="girls pants">girls pants</option>
                     </select></td>
-                </div>
+
             </tr> 
             <tr>
-                <div class="holders">
+
                     <td><label> TAG :</label></td>
                     <td><label id="TAG-lbl">Bring TAG to print ID</label></td>
                     <input type="hidden" id="p_tag" name="p_tag" value="">
-                </div>
+
             </tr>
             <tr>
-                <div class="holders">
+                <td colspan="2">
                     <input type="button" onclick="sumbission()" value="submit">
-                </div>
+                </td>
             </tr>
+
         </form>
-    </table></div>
+    </table>
     <script>
         var socket = io.connect("http://127.0.0.1:5000/");
         socket.on('new_tag' , function(rfid){

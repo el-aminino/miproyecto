@@ -16,10 +16,10 @@ import threading
 
 
 
-
+boardname = ""
 
 #defining app and configurations
-app = Flask(__name__, template_folder='')
+app = Flask(__name__, template_folder='',static_folder='')
 app.secret_key = "1234"
 #defining socket
 socket = SocketIO(app, cors_allowed_origins='*')
@@ -28,23 +28,25 @@ socket = SocketIO(app, cors_allowed_origins='*')
 #definations we need here
     
 def send_data():
-    a = d.readeserial.serreader('/dev/ttyUSB0')
-    if isinstance(a,str) == False:
-        print(a)
-        #print(str(type(a[1]))+str(type(a[2])))
-        #temp = a[1]+","+str(a[2])
-        price ={'value':a[2]}#,'value2':a[2]}
-        name = {'value':a[1]}
-        
-        socket.emit('send_name',name)
-        print(f'sending price :{name}')
-        socket.emit('send_price',price)
-        print(f'sending price :{price}')
-    if isinstance(a,str):
-        print(a)
-        rfid = {'value':a}
-        socket.emit("new_tag",rfid)
-        print(f'sending price :{rfid}')
+    global boardname
+    if boardname != "" :
+        a = d.readeserial.serreader(boardname)
+        if isinstance(a,str) == False:
+            print(a)
+            #print(str(type(a[1]))+str(type(a[2])))
+            #temp = a[1]+","+str(a[2])
+            price ={'value':a[2]}#,'value2':a[2]}
+            name = {'value':a[1]}
+            
+            socket.emit('send_name',name)
+            print(f'sending price :{name}')
+            socket.emit('send_price',price)
+            print(f'sending price :{price}')
+        if isinstance(a,str):
+            print(a)
+            rfid = {'value':a}
+            socket.emit("new_tag",rfid)
+            print(f'sending price :{rfid}')
 def dummy_data_update():
     while True:
         send_data()
@@ -54,9 +56,11 @@ def dummy_data_update():
 
 
 def get_tag():
-    a = d.readeserial.tag_reader('/dev/ttyUSB0')
-    if a != "1":
-        print(a)
+    global boardname
+    if boardname != "":
+        a = d.readeserial.tag_reader(boardname)
+        if a != "1":
+            print(a)
 
 
 def dummy_get_tag():
@@ -86,15 +90,18 @@ get_thread = threading.Thread(target=dummy_get_tag)
 #home page
 @app.route('/', methods=['GET','POST'])
 def home():
-    if not update_thread.is_alive():
-        update_thread.start()
+   
     #checks if there is any session variable
     if session:
         #looks for Comports which exported from system
         if session['brdname']:
-             """     --------- Here You need to make a validation check for Arduino availability ---------     """
+            global boardname 
+            boardname = session['brdname']
+            print(boardname)
+            if update_thread.is_alive() == False:
+                     update_thread.start()
              #renders Home page
-             return render_template('WEB/webui.html')
+            return render_template('WEB/webui.html')
     #redirect to board selection page
     else :
         return redirect('/select_board?brd=no' , code=302)
@@ -159,7 +166,7 @@ def brd():
 
 @app.route('/add-prod')
 def addprod():
-    if not update_thread.is_alive():
+    if update_thread.is_alive() == False:
         update_thread.start()
     return render_template("WEB/add.html")
 
@@ -196,14 +203,31 @@ def addact():
 
 @app.route('/manage-prod')
 def manprod():
+    db_cn = d.mysql_defs.dbcn()
+    cursor = db_cn.cursor()
+    query = "Select * FROM goods;"
+    cursor.execute(query)
+    result = cursor.fetchall()
+    i = 0
+    return render_template("WEB/pro-man.html",data = result, i = i)
 
-    return "Product Management"
-
+@app.route('/del-prod', methods=['GET','POST'])
+def delprod():
+    if request.method == "GET":
+        id = request.args['id']
+        db_cn = d.mysql_defs.dbcn()
+        cursor = db_cn.cursor()
+        query = f"DELETE FROM goods WHERE TAG = '{id}';"
+        cursor.execute(query)
+        db_cn.commit()
+    return redirect('/manage-prod')
 
 
 
 @app.route('/kill')
 def killer():
+    global boardname
+    boardname = ""
     session.pop('brdname', None)
     return redirect('/', code=302)
 
